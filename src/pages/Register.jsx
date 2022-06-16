@@ -1,7 +1,17 @@
-import { Cascader, Form, Input, Checkbox, Button } from "antd";
+import {
+  Cascader,
+  Form,
+  Input,
+  Checkbox,
+  Button,
+  Select,
+  DatePicker,
+} from "antd";
 import Password from "antd/lib/input/Password";
+import { Option } from "antd/lib/mentions";
 import React, { useState } from "react";
-import { emailCheck } from "../services/auth_service";
+import { useNavigate } from "react-router-dom";
+import { emailCheck, registerUser } from "../services/auth_service";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -31,15 +41,60 @@ const tailFormItemLayout = {
   },
 };
 
+const config = {
+  rules: [
+    {
+      type: "object",
+      required: true,
+      message: "Please select time!",
+    },
+  ],
+};
+
 const Register = () => {
   const [form] = Form.useForm();
-  const [user, setUser] = useState();
+  const navigate = useNavigate();
+  let isUserFound = false;
 
-  const userCheck = () => {
+  const userCheck = async (user) => {
     console.log(user);
-    const response = emailCheck(user);
-    if (!response.users) {
+    const { data } = await emailCheck(user);
+    isUserFound = false;
+    if (data.users.length) {
+      isUserFound = true;
       return Promise.reject("User Already exist");
+    }
+  };
+  
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+  const handleForm = async (values) => {
+      debugger;
+    if (!values.agreement || isUserFound) {
+      return;
+    }
+    const user = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      phone: "92" + values.phone,
+      username: values.username,
+      password: values.password,
+      age: getAge(values.datePicker),
+      gender: values.gender
+    };
+    const data = await registerUser(user);
+    if (data) {
+      navigate("/login");
     }
   };
 
@@ -48,10 +103,14 @@ const Register = () => {
       {...formItemLayout}
       form={form}
       name="register"
-      initialValues={{
-        prefix: "86",
+      colon={false}
+      labelAlign="left"
+      labelWrap
+      wrapperCol={{
+        flex: 1,
       }}
       scrollToFirstError
+      onFinish={handleForm}
     >
       <Form.Item
         name="firstName"
@@ -86,7 +145,7 @@ const Register = () => {
       </Form.Item>
 
       <Form.Item
-        name="nickname"
+        name="username"
         label="Username"
         tooltip="What do you want others to call you?"
         rules={[
@@ -97,11 +156,11 @@ const Register = () => {
           },
           () => ({
             validator(_, value) {
-              return emailCheck(value);
+              return userCheck(value);
             },
           }),
-          (validateTrigger = "onBlur"),
         ]}
+        validateTrigger="onBlur"
       >
         <Input />
       </Form.Item>
@@ -146,6 +205,10 @@ const Register = () => {
         <Input.Password />
       </Form.Item>
 
+      <Form.Item name="datePicker" label="DatePicker" {...config}>
+        <DatePicker />
+      </Form.Item>
+
       <Form.Item
         name="residence"
         label="Address"
@@ -161,6 +224,23 @@ const Register = () => {
       >
         <Input addonBefore="+92" style={{ width: "100%" }} />
       </Form.Item>
+      <Form.Item
+        name="gender"
+        label="Gender"
+        rules={[
+          {
+            required: true,
+            message: "Please select gender!",
+          },
+        ]}
+      >
+        <Select placeholder="select your gender">
+          <Option value="male">Male</Option>
+          <Option value="female">Female</Option>
+          <Option value="other">Other</Option>
+        </Select>
+      </Form.Item>
+
       <Form.Item
         name="agreement"
         valuePropName="checked"

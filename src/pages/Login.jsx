@@ -8,9 +8,9 @@ const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || '/';
 
-  const handleForm = (values) => {
-    const response = loginApi(values);
-    if(response.token) {
+  const handleForm = async (values) => {
+    const {data} = await loginApi(values);
+    if(data.token) {
       navigate(from,{replace:true})
     }
 

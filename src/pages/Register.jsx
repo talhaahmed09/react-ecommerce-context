@@ -99,6 +99,8 @@ const Register = () => {
   };
 
   return (
+    <div className="w-100 p-4">
+    <h1 className="p-4 text-center " >Register</h1>
     <Form
       {...formItemLayout}
       form={form}
@@ -264,6 +266,7 @@ const Register = () => {
         </Button>
       </Form.Item>
     </Form>
+    </div>
   );
 };
 

@@ -27,6 +27,7 @@ const Login = () => {
 
   return (
     <div className="w-100 p-4">
+      <h1 className="p-3 text-center ">Login</h1>
       {/* <div className="row justify-content-center">
         <div className="col-xs-12 col-sm-12 col-md-8 col-lg-6   column col-sm-offset-0 col-md-offset-2 col-lg-offset-3"> */}
       <Form

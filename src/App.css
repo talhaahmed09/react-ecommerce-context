@@ -1,6 +1,12 @@
-.wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.menu-item{
+  cursor: pointer;
+  margin-left: 25px;
+  margin: 0 auto;
 }
+
+.Wrapper header {
+  background: #008294 !important;
+}
+
+
+

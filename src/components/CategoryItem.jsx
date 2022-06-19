@@ -1,6 +1,7 @@
 
 import styled from "styled-components";
 import { mobile } from "../responsive/responsive";
+
 const Container = styled.div`
   flex: 1;
   margin: 3px;

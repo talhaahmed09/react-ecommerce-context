@@ -7,17 +7,18 @@ import { getCategories } from "../services/category_service";
 import { titleCase } from "../hooks/titleCase";
 import { Skeleton } from "antd";
 
-const Category = () => {
-    const [isLoading, setIsLoading] = useState(false)
-  let categoriesList = null;
-  //styles
-  const Container = styled.div`
-    display: flex;
-    padding: 20px;
-    justify-content: space-between;
-    ${mobile({ padding: "0px", flexDirection: "column" })}
-  `;
+const Container = styled.div`
+display: flex;
+padding: 20px;
+justify-content: space-between;
+${mobile({ padding: "0px", flexDirection: "column" })}
+`;
 
+let categoriesList = null;
+
+const Category = () => {
+  const [isLoading, setIsLoading] = useState(false)
+ 
   const getData = async () => {
     setIsLoading(true)
     categoriesList = await getCategories();
@@ -44,7 +45,7 @@ const Category = () => {
   return (
     <Container>
         <Skeleton loading={isLoading}>
-      {categories.map((item) => (
+      {categories && categories.map((item) => (
         <CategoryItem item={item} key={item.id} />
       ))}
       </Skeleton>

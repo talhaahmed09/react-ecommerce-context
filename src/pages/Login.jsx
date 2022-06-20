@@ -1,15 +1,15 @@
 import { Button, Form, Input } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import { loginApi } from "../services/auth_service";
+import { useAuth } from "../context/Auth/AuthProvider";
 
 const Login = () => {
-
+  const {logIn} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || '/';
 
   const handleForm = async (values) => {
-    const {data} = await loginApi(values);
+    const data = await logIn(values);
     if(data.token) {
       navigate(from,{replace:true})
     }

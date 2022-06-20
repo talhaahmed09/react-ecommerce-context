@@ -33,7 +33,6 @@ const Products = () => {
         return ( 
             <div className = "d-flex flex-wrap p-2 justify-content-center ">
                 <Skeleton loading={isLoading}>
-                    {console.log(products)}
                 {products && products.map((item) => (
                     <Product item={item} key={item.id} />
                 ))}

@@ -4,7 +4,7 @@ import { categories } from "../data/data";
 import { mobile } from "../responsive/responsive";
 import CategoryItem from "./CategoryItem";
 import { getCategories } from "../services/category_service";
-import { titleCase } from "../hooks/titleCase";
+import { titleCase } from "../utilities/titleCase";
 import { Skeleton } from "antd";
 
 const Container = styled.div`

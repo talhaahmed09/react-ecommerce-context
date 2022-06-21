@@ -25,7 +25,7 @@ const ProductTile = ({item}) => {
       <span style={{fontSize:'10px', color:'#757575'}}>-{item.discountPercentage}%</span>
       </div>
       <div className="d-flex">
-      <Rate style={{fontSize:'15px'}} allowHalf disabled defaultValue={item.rating} />
+      <Rate style={{fontSize:'12px'}} className="col-sm-12" allowHalf disabled defaultValue={item.rating} />
       </div>
       </div>
     </Card>

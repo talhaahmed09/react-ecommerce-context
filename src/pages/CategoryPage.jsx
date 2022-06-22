@@ -1,5 +1,6 @@
-import { Divider, Skeleton } from "antd";
+import { Breadcrumb, Divider, Skeleton } from "antd";
 import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 // import { useParams } from "react-router-dom";
 import ProductTile from "../components/ProductTile";
 import Sidebar from "../components/Sidebar";
@@ -10,23 +11,22 @@ let brands = [];
 let productData = [];
 
 const CategoryPage = () => {
-  // let { category } = useParams();
+  let { category } = useParams();
   let newData = [];
   let min;
   let max;
   const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState()
+  const [products, setProducts] = useState();
   const [brandSort, setBrandSort] = useState([]);
-  const [values,setValues] = useState({min:'',max:''});
+  const [values, setValues] = useState({ min: "", max: "" });
 
-  const categoryName = "SmartPhones";
+  const categoryName = category;
 
   const getFilteredBrands = (brand) => {
-    
-    if(!brand.length){
-      if(min || max){
+    if (!brand.length) {
+      if (min || max) {
         newData = productData;
-        return onPriceFilter({min:min,max:max})
+        return onPriceFilter({ min: min, max: max });
       }
       return setProducts(productData);
     }
@@ -37,23 +37,22 @@ const CategoryPage = () => {
         }
       });
     });
-    if(min || max){
-      return onPriceFilter({min:min,max:max})
+    if (min || max) {
+      return onPriceFilter({ min: min, max: max });
     }
     setProducts(newData);
-  
   };
 
   const getProducts = async () => {
     setIsLoading(true);
-    const { data } = await getCategoryProducts("smartphones");
+    const { data } = await getCategoryProducts(categoryName);
     productData = data.products;
-     setProducts(productData)
-    if (products) {
+  
+    if (productData) {
       setIsLoading(false);
-     
+
       let arrayData = [];
-      products.forEach((item, i) => {
+      productData.forEach((item, i) => {
         arrayData.push({ name: item.brand, key: i.toString() });
       });
       let key = "name";
@@ -61,14 +60,16 @@ const CategoryPage = () => {
         ...new Map(arrayData.map((item) => [item[key], item])).values(),
       ];
     }
-    return true;
+    return setProducts(productData);;
   };
   const onPriceFilter = (values) => {
-     min = parseInt(values.min,10);
-     max = values.max ? parseInt(values.max,10) : 20000;
-     const prods = products.filter(item => item.price >=min && item.price <= max);
-      setProducts(prods);
-  }
+    min = parseInt(values.min, 10);
+    max = values.max ? parseInt(values.max, 10) : 20000;
+    const prods = products.filter(
+      (item) => item.price >= min && item.price <= max
+    );
+    setProducts(prods);
+  };
 
   useEffect(() => {
     getProducts();
@@ -77,6 +78,12 @@ const CategoryPage = () => {
   return (
     <div className="container">
       <div className="row">
+        <Breadcrumb>
+          <Breadcrumb.Item><Link to='/'>Home</Link></Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a >Category</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <div className="col-2">
           <Sidebar
             brands={brands}

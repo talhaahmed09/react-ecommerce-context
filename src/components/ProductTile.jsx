@@ -1,6 +1,7 @@
 import { Card, Col, Rate } from 'antd'
 import Meta from 'antd/lib/card/Meta'
 import React, { useEffect } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { totalPriceCalculator } from '../utilities/priceCalculator'
 
 const ProductTile = ({item}) => {
@@ -15,6 +16,7 @@ const ProductTile = ({item}) => {
   // },[])
   return (
     <div className='col-md-6 col-lg-3 col-sm-12'  >
+      <Link to={`/product/${item.id}`}>
     <Card  hoverable className='m-2'   style={{maxWidth:'300px', maxHeight:'350px'}}
     cover={<img alt="example" src={item.thumbnail} style={{height:'220px'}}/>} >
     <Meta title={item.title} style={{fontSize:'12px', wordWrap:'break-word', color:'#108ee9 !important'}}/>
@@ -29,6 +31,7 @@ const ProductTile = ({item}) => {
       </div>
       </div>
     </Card>
+    </Link>
     </div>
   )
 }

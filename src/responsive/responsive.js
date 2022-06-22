@@ -7,3 +7,11 @@ export const mobile = (props) => {
     }
   `;
 };
+
+export const tab = props => {
+  return css`
+    @media only screen and (max-width: 500px) {
+      ${props}
+    }
+  `;
+}

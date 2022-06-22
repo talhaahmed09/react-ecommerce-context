@@ -26,6 +26,7 @@ const Category = () => {
         setIsLoading(false)
         categories.forEach((element, i) => {
             element.title = titleCase(categoriesList[i] );
+            element.name = categoriesList[i];
           });
     }
    
@@ -34,19 +35,16 @@ const Category = () => {
   useEffect(() => {
     let abortController;
     abortController = new AbortController();
-    
     getData()
-
-    return () => {
       return () => abortController.abort();
-    };
+   
   }, []);
 
   return (
     <Container>
         <Skeleton loading={isLoading}>
       {categories && categories.map((item) => (
-        <CategoryItem item={item} key={item.id} />
+       <CategoryItem item={item} key={item.id} />
       ))}
       </Skeleton>
     </Container>

@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive/responsive";
 
@@ -43,13 +44,14 @@ const Button = styled.button`
     font-weight: 600;
 `;
 
-const CategoryItem = ({item,category}) => {
+const CategoryItem = ({item}) => {
   return (
     <Container>
+      {console.log(item)}
     <Image src={item.img} />
     <Info>
       <Title>{item.title}</Title>
-      <Button>SHOP NOW</Button>
+      <Link to={`/${item.name}` }>  <Button>SHOP NOW</Button></Link>
     </Info>
   </Container>
   )

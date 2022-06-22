@@ -43,9 +43,6 @@ const Sidebar = ({
     onChange: onSelectChange,
   };
 
-  const onPriceChange = (value) => {
-  };
-
   return (
     <div className="mt-4">
       <Skeleton loading={isLoading}>
@@ -62,10 +59,19 @@ const Sidebar = ({
               size="small"
               defaultValue={0}
               placeholder="min"
+              onKeyPress={(event) => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
               onChange={value=> setValues({...values,min:value})}
             />
             <span style={{ color: "grey" }}>-</span>
-            <InputNumber size="small" placeholder="max" defaultValue={0} onChange={value=> setValues({...values,max:value})}/>
+            <InputNumber size="small" placeholder="max" defaultValue={0}  onKeyPress={(event) => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              } } onChange={value=> setValues({...values,max:value})}/>
             <Button
               type="primary"
               icon={<CaretRightFilled />}

@@ -20,3 +20,19 @@ export const getPopularProducts = async (limit, skip)  => {
       return response;
     }
 }
+
+export const getProductById = async(id) => {
+  let response;
+    try {
+      response = await axios.get(`${PRODUCT_URL}/${id}`)
+      return response;
+    } catch (err) {
+      if (!err?.response) {
+          errMsg ='No Server Response';
+      } else if (err.response?.status === 409) {
+          errMsg ='Username Taken';
+      } else {
+          errMsg = 'Registration Failed'
+      }
+    }
+}

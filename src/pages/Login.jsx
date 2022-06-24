@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/Auth/AuthProvider";
+import { useAuth } from "../context/auth/AuthProvider";
 
 const Login = () => {
   const {logIn} = useAuth();

@@ -1,16 +1,42 @@
-import { Avatar, Input } from "antd";
+import { Avatar, Input, Skeleton } from "antd";
 import {
   UserOutlined,
   ShoppingCartOutlined,
   HeartOutlined,
 } from "@ant-design/icons";
+// import { useEffect, useState } from "react";
+// import { getCategories } from "../services/category_service";
+import { Link } from "react-router-dom";
+// import { titleCase } from "../utilities/titleCase";
 
 const Navbar = () => {
+  // let categories = []
+  // const [isLoading, setIsLoading] = useState(false);
+  
+//  const getCategoriesList  = async () => {
+//    setIsLoading(true);
+//    categories = await getCategories();
+//    if(categories){
+//      setIsLoading(false)
+//    }
+
+//  }
+
+//  useEffect(() => {
+//   let abortController;
+//   abortController = new AbortController();
+
+//   getCategoriesList();
+
+//   return () => {
+//     return () => abortController.abort();
+// };
+//  },[])
   return (
     <div className="Wrapper ">
       <header>
         <div className="container d-flex py-5">
-          <a href="#">
+        <Link to="/"> <a href="/#"> 
             <svg
               className="b-loaded"
               xmlns="http://www.w3.org/2000/svg"
@@ -53,28 +79,39 @@ const Navbar = () => {
                 </g>
               </g>
             </svg>
+        
           </a>
-
+          </Link>
+          {/* <Skeleton loading={isLoading}>
+            {categories.map(item => (
+            <Link to={`/${item.name}`} ><div style={{color:'#fff'}}>{titleCase(item)}</div></Link>
+          ))}
+</Skeleton> */}
           <Input type="search" placeholder="Search (e.g: jeans, iphone)" />
 
           <div className="d-flex menu-item">
-            <a>
+            <a href="/#">
               <UserOutlined
                 style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
               />
             </a>
-            <a>
+            <Link to ="/cart">
               <ShoppingCartOutlined
                 style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
               />
-            </a>
-            <a>
+            </Link>
+            <a href="/#">
               <HeartOutlined
                 style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
               />
             </a>
+          
           </div>
         </div>
+
+        {/* <div className="container d-flex justify-content-center">
+        
+        </div> */}
       </header>
     </div>
   );

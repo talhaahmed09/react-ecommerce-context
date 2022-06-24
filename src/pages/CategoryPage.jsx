@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import ProductTile from "../components/ProductTile";
 import Sidebar from "../components/Sidebar";
 import { getCategoryProducts } from "../services/category_service";
+import { Select } from 'antd';
 
 // let products = null;
 let brands = [];
@@ -47,7 +48,7 @@ const CategoryPage = () => {
     setIsLoading(true);
     const { data } = await getCategoryProducts(categoryName);
     productData = data.products;
-  
+
     if (productData) {
       setIsLoading(false);
 
@@ -60,7 +61,7 @@ const CategoryPage = () => {
         ...new Map(arrayData.map((item) => [item[key], item])).values(),
       ];
     }
-    return setProducts(productData);;
+    return setProducts(productData);
   };
   const onPriceFilter = (values) => {
     min = parseInt(values.min, 10);
@@ -75,13 +76,18 @@ const CategoryPage = () => {
     getProducts();
   }, []);
 
+  const { Option } = Select;
+
+
   return (
     <div className="container">
       <div className="row">
         <Breadcrumb>
-          <Breadcrumb.Item><Link to='/'>Home</Link></Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a >Category</a>
+            <Link to="/">Home</Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <a href="/#">Category</a>
           </Breadcrumb.Item>
         </Breadcrumb>
         <div className="col-2">
@@ -97,6 +103,27 @@ const CategoryPage = () => {
           />
         </div>
         <div className="col-10">
+          <div className="container">
+              <div className="filter d-flex">
+              <Select
+                defaultValue="lucy"
+                style={{
+                  width: 120,
+                }}
+              >
+                <Option value="jack">Jack</Option>
+                <Option value="lucy">Lucy</Option>
+                <Option value="disabled" disabled>
+                  Disabled
+                </Option>
+                <Option value="Yiminghe">yiminghe</Option>
+              </Select>
+           
+              </div>
+
+          </div>
+
+
           <div className="container">
             <Divider />
             <h1 style={{ fontSize: "20px" }}>{categoryName}</h1>

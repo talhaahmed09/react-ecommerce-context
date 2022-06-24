@@ -7,7 +7,10 @@ import ProductImages from "../components/ProductImages";
 import { getProductById } from "../services/product_service";
 import { totalPriceCalculator } from "../utilities/priceCalculator";
 import { crumbTitle, titleCase } from "../utilities/titleCase";
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { validateNumber } from "../utilities/validateInput";
+import { useCart } from "../context/cart/CartContext";
+// import { useShoppingCart } from "../context/cart/CartContext";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -37,17 +40,22 @@ const Box = styled.div`
 `;
 
 const ProductDisplay = () => {
-    const itemValue = 1;
+  const [itemValue, setItemValue] = useState(1);
   let { id } = useParams();
   const [product, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [indexPos, setIndexPos] = useState(0);
   const myRef = useRef(null);
 
+  const {addToCart, getItemQuantity, decreaseCartQuantity } = useCart();
+
+  const quantity = getItemQuantity(Number(id))
+
   const getProduct = async () => {
     setIsLoading(true);
     const { data } = await getProductById(id);
     if (data) {
+      quantity && setItemValue(quantity)
       setIsLoading(false);
     }
     return setProduct(data);
@@ -70,15 +78,35 @@ const ProductDisplay = () => {
     setIndexPos(index);
   };
 
-  const updateItemValue = (type) => {
-    if(type === 'minus'){
-     return itemValue =  itemValue -1;
+  const updateItemValue = (value) => {
+    if (value < 1 ) {
+      return setItemValue(1);
     }
-    return itemValue = itemValue +1;
+    else if(value > product.stock){
+        return setItemValue(product.stock)
+    }
+    else {
+       setItemValue(value)
+    }
+
+        
+  };
+
+  const handleChange = (e) => {
+
+    updateItemValue(validateNumber(e));
+  }
+
+  const handleClick = () => {
+    if(quantity && quantity > itemValue){
+  return  decreaseCartQuantity(Number(id),quantity - itemValue);
+    
+    }
+   return addToCart(Number(id),itemValue -quantity, product?.price, product?.discountPercentage)
   }
 
   return (
-    <div>
+    <div className="container">
       <Skeleton loading={isLoading} rows={1}>
         <Breadcrumb className="mx-3 pt-2" separator=">">
           <Breadcrumb.Item>
@@ -112,7 +140,12 @@ const ProductDisplay = () => {
               <div className="d-flex justify-content-between mb-3">
                 <h2 className="text-uppercase">{product.title}</h2>
               </div>
-              <h4 style={{ fontSize: "22px", color:'#f57224' }}>${product.price}</h4>
+              <h4 style={{ fontSize: "22px", color: "#f57224" }}>
+                ${totalPriceCalculator(
+                    product.price,
+                    product.discountPercentage
+                  )}
+              </h4>
               <div className="d-flex  mb-3 ">
                 <span
                   style={{
@@ -123,10 +156,7 @@ const ProductDisplay = () => {
                   }}
                 >
                   $
-                  {totalPriceCalculator(
-                    product.price,
-                    product.discountPercentage
-                  )}
+                 {product.price}
                 </span>
                 <span style={{ fontSize: "16px", fontWeight: "400px" }}>
                   -{product.discountPercentage}%
@@ -139,15 +169,25 @@ const ProductDisplay = () => {
                 tab={handleTab}
                 myRef={myRef}
               />
-                <div className="row justify-content-center">
+              <div className="row justify-content-center">
                 <div className="p-2 d-flex ">
-                <Button icon={<MinusOutlined />} className="p-2"/> 
-                <Input size="small" placeholder="1" style={{width:'10%'}} className="text-center" bordered={false} value={itemValue} />
-                <Button icon={<PlusOutlined />} className="p-2"/> 
+                  <Button icon={<MinusOutlined />} className="p-2" onClick={() => updateItemValue(itemValue-1)} />
+                  <Input
+                    type={'number'}
+                    size="small"
+                    placeholder="1"
+                    style={{ width: "10%" }}
+                    className="text-center"
+                    bordered={false}
+                    value={itemValue}
+                    onChange={handleChange}
+                  />
+                  <Button icon={<PlusOutlined />} className="p-2" onClick={() => updateItemValue(itemValue+1)} />
                 </div>
-                <Button className="mt-2" type="primary">Add to cart</Button>
-                </div>
-             
+                <Button className="mt-2" type="primary" onClick={handleClick}>
+                  Add to cart
+                </Button>
+              </div>
             </Box>
           </Details>
         </Skeleton>

@@ -1,3 +1,6 @@
 export const totalPriceCalculator = (price,discount) => {
-    return Math.floor((price * 100) / (discount))
+    if((isNaN(price)) ){
+        return;
+    }
+    return Math.floor(price - (price ) * (discount/100))
 }

@@ -17,9 +17,8 @@ const Sidebar = ({
   getFilteredBrands,
   onPriceFilter,
   values,
-  setValues
+  setValues,
 }) => {
-  
   let brandName = [];
   const onSelectChange = (selectedRowKeys, selectedRows, info) => {
     if (selectedRows.length < brandName.length) {
@@ -64,19 +63,25 @@ const Sidebar = ({
                   event.preventDefault();
                 }
               }}
-              onChange={value=> setValues({...values,min:value})}
+              onChange={(value) => setValues({ ...values, min: value })}
             />
             <span style={{ color: "grey" }}>-</span>
-            <InputNumber size="small" placeholder="max" defaultValue={0}  onKeyPress={(event) => {
+            <InputNumber
+              size="small"
+              placeholder="max"
+              defaultValue={0}
+              onKeyPress={(event) => {
                 if (!/[0-9]/.test(event.key)) {
                   event.preventDefault();
                 }
-              } } onChange={value=> setValues({...values,max:value})}/>
+              }}
+              onChange={(value) => setValues({ ...values, max: value })}
+            />
             <Button
               type="primary"
               icon={<CaretRightFilled />}
               style={{ margin: "0 5px" }}
-              onClick={e => onPriceFilter(values)}
+              onClick={(e) => onPriceFilter(values)}
             ></Button>
           </div>
         </div>

@@ -1,17 +1,20 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import AuthProvider from './context/Auth/AuthProvider';
+import AuthProvider from './context/auth/AuthProvider';
+import Cart from './pages/Cart';
 import CategoryPage from './pages/CategoryPage';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import ProductDisplay from './pages/ProductDisplay';
 import Register from './pages/Register';
+import {CartProvider} from './context/cart/CartContext.jsx'
 
 function App() {
-  return (
+  return ( <AuthProvider>
+    <CartProvider>
     <div className="wrap ">
-      <AuthProvider>
+ 
        <Navbar/>
       <Routes>
         <Route path='/' element={<Dashboard/>}/>
@@ -19,9 +22,11 @@ function App() {
         <Route path='register' element={<Register/>}/>
         <Route path=':category' element={<CategoryPage/>}/>
         <Route path='/product/:id' element={<ProductDisplay/>}/>
+        <Route path='cart' element={<Cart/>}/>
       </Routes>
-      </AuthProvider>
     </div>
+    </CartProvider>
+    </AuthProvider>
   );
 }
 

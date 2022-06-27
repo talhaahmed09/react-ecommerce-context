@@ -11,7 +11,8 @@ import Register from "./pages/Register";
 import { CartProvider } from "./context/cart/CartContext.jsx";
 import MissingPage from "./pages/MissingPage";
 import Checkout from "./pages/Checkout";
-import PrivateRoutes from "./components/PrivateRoutes";
+import PrivateRoutes from "./routes/PrivateRoutes";
+import PublicRoutes from "./routes/PublicRoutes";
 
 function App() {
   return (
@@ -21,8 +22,10 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route element={<PublicRoutes/>}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            </Route>
             <Route path=":category" element={<CategoryPage />} />
             <Route path="/product/:id" element={<ProductDisplay />} />
             <Route path="cart" element={<Cart />} />

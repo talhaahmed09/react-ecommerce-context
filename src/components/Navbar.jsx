@@ -4,34 +4,35 @@ import {
   ShoppingCartOutlined,
   HeartOutlined,
 } from "@ant-design/icons";
+import { Dropdown, Menu, Space, Button  } from 'antd';
 // import { useEffect, useState } from "react";
 // import { getCategories } from "../services/category_service";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/cart/CartContext";
 // import { titleCase } from "../utilities/titleCase";
+import { useAuth } from "../context/auth/AuthProvider";
 
 const Navbar = () => {
-  // let categories = []
-  // const [isLoading, setIsLoading] = useState(false);
-  
-//  const getCategoriesList  = async () => {
-//    setIsLoading(true);
-//    categories = await getCategories();
-//    if(categories){
-//      setIsLoading(false)
-//    }
+const {cartQuantity} = useCart();
+const {state, logOut} = useAuth();
 
-//  }
+const handleClick = () => {
+  debugger
+  logOut();
+}
 
-//  useEffect(() => {
-//   let abortController;
-//   abortController = new AbortController();
+const menu = <Menu
+onClick={handleClick}
+    items={[
+      {
+        key: '1',
+        label: 
+            'Log Out'
+        
+      },
+    ]}
+    />
 
-//   getCategoriesList();
-
-//   return () => {
-//     return () => abortController.abort();
-// };
-//  },[])
   return (
     <div className="Wrapper ">
       <header>
@@ -90,21 +91,26 @@ const Navbar = () => {
           <Input type="search" placeholder="Search (e.g: jeans, iphone)" />
 
           <div className="d-flex menu-item">
-            <a href="/#">
-              <UserOutlined
-                style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
+             {
+               state.isLoggedIn ? ( 
+                <Dropdown overlay={menu} >
+            
+                    <UserOutlined 
+                style={{ color:'#fff', fontSize: "20px", padding: "10px" }}
               />
-            </a>
+              </Dropdown>
+           
+             ) : ( <Link to="/login"><div style={{color:'#fff', fontSize:'14px',}} className="text-center p-2">Login/Register</div> </Link>)
+             }
             <Link to ="/cart">
+              <div className="d-flex">
+          
               <ShoppingCartOutlined
                 style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
               />
+              {cartQuantity > 0 && <span style={{color: "#fff",}}>{cartQuantity}</span>}
+              </div>
             </Link>
-            <a href="/#">
-              <HeartOutlined
-                style={{ color: "#fff", fontSize: "20px", padding: "10px" }}
-              />
-            </a>
           
           </div>
         </div>

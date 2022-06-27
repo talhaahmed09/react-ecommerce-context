@@ -22,6 +22,9 @@ export const CartProvider = ({children}) => {
       }
 
     const addToCart = (id,value, price, discount) => {
+      if((!id && !value )||  (!price && !discount)){
+        return
+      }
         setCartItems(currItems => {
             if (currItems.find(item => item.id === id) == null) {
               return [...currItems, { id, quantity: value, price: price, discount: discount}]
@@ -38,6 +41,9 @@ export const CartProvider = ({children}) => {
     }
 
     const decreaseCartQuantity  = (id,value) => {
+      if(!id || !value){
+        return
+      }
         setCartItems(currItems => {
           if (currItems.find(item => item.id === id)?.quantity === 1) {
             return currItems.filter(item => item.id !== id)
@@ -58,7 +64,9 @@ export const CartProvider = ({children}) => {
         })
       }
 
-      const totalValues = cartItems.reduce((partialSum, a) => partialSum + totalPriceCalculator( a.price, a.discount), 0)
+      const totalValues = () => cartItems.reduce((accumulator, object) => {
+        return accumulator + (totalPriceCalculator(object.price,object.discount) * object.quantity);
+      }, 0);
 
     const values = {
         addToCart,

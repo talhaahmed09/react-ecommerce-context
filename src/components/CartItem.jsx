@@ -6,7 +6,7 @@ import { DeleteOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import "../css/CartItem.css";
 import { totalPriceCalculator } from "../utilities/priceCalculator";
 
-const CartItem = ({ id, quantity, total, setTotal }) => {
+const CartItem = ({ id, quantity}) => {
   const [loading, setLoading] = useState(false);
   const [itemValue, setItemValue] = useState(quantity);
   const { cartItems, removeFromCart, addToCart, decreaseCartQuantity } =
@@ -26,7 +26,7 @@ const CartItem = ({ id, quantity, total, setTotal }) => {
 
   const updateItemValue = (value) => {
     if (value < 1) {
-        addToCart(1)
+        addToCart(id, 1, product?.price, product?.discountPercentage)
       return setItemValue(1);
     } else if (value > product.stock) {
       return setItemValue(product.stock);
@@ -39,29 +39,29 @@ const CartItem = ({ id, quantity, total, setTotal }) => {
     if (quantity && quantity > itemValue) {
       return decreaseCartQuantity(Number(id), quantity - itemValue);
     }
-    return addToCart(Number(id), itemValue - quantity);
+    return addToCart(Number(id), itemValue - quantity, product?.price, product?.discountPercentage);
   };
 
   const updatePrice = (price, discount) => {
     let totalPrice = 0
 
-        totalPrice = totalPriceCalculator(
-            price * quantity,
-            discount
-          );
-           setTotal(item => {
-            if (item.find(item => item.id === id) == null) {
-                return [...item, { id, price: totalPrice}]
-              } else {
-                return item.map(item => {
-                  if (item.id === id) {
-                    return { ...item, price: totalPrice }
-                  } else {
-                    return item
-                  }
-                })
-              }
-          });
+        // totalPrice = totalPriceCalculator(
+        //     price * quantity,
+        //     discount
+        //   );
+          //  setTotal(item => {
+          //   if (item.find(item => item.id === id) == null) {
+          //       return [...item, { id, price: totalPrice}]
+          //     } else {
+          //       return item.map(item => {
+          //         if (item.id === id) {
+          //           return { ...item, price: totalPrice }
+          //         } else {
+          //           return item
+          //         }
+          //       })
+          //     }
+          // });
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const CartItem = ({ id, quantity, total, setTotal }) => {
   useEffect(() => {
     handleClick();
    
-      updatePrice(product?.price, product?.discountPercentage);
+      // updatePrice(product?.price, product?.discountPercentage);
     
   }, [itemValue]);
 

@@ -1,15 +1,31 @@
 import axios from "axios";
+import { openNotificationWithIcon } from "../utilities/toast";
 
 const AUTH_URL = "https://dummyjson.com/auth/login";
 const REGISTER_API = "https://dummyjson.com/users/";
 let errMsg = "";
 
 export const loginApi = async (body) => {
-  const response = await axios.post(AUTH_URL, JSON.stringify(body), {
-    headers: { "Content-Type": "application/json" },
-  });
+  // const response = await axios.post(AUTH_URL, JSON.stringify(body), {
+  //   headers: { "Content-Type": "application/json" },
+  // });
 
-  return response;
+  // return response;
+  let response;
+  try {
+    response = await axios.post(AUTH_URL, JSON.stringify(body), {
+      headers: { "Content-Type": "application/json" },
+       
+    });
+    openNotificationWithIcon('success', 'Successs', 'Login Successfull.')
+   return response
+  } catch (err) {
+    if (!err?.response) {
+     return openNotificationWithIcon('error', 'ERROR', 'No Server Response')
+    }  else {
+      return openNotificationWithIcon('error', 'ERROR', 'Registration Failed')
+    }
+  }
 };
 
 export const emailCheck = async (body) => {
@@ -24,17 +40,12 @@ export const registerUser = async (obj) => {
       headers: { "Content-Type": "application/json" },
        
     });
-   
+   return response
   } catch (err) {
     if (!err?.response) {
-        errMsg ='No Server Response';
-    } else if (err.response?.status === 409) {
-        errMsg ='Username Taken';
+      return openNotificationWithIcon('error', 'ERROR', 'No Server Response');
     } else {
-        errMsg = 'Registration Failed'
-    }
-  }finally{
-    return response;
+      return openNotificationWithIcon('error', 'ERROR', 'Registration Failed');
   }
-  
+}
 };

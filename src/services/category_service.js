@@ -1,4 +1,5 @@
 import axios from "axios";
+import { openNotificationWithIcon } from "../utilities/toast";
 
 const CATEGORY_URL = 'https://dummyjson.com/products/categories/';
 const CATEGORY_PRODUCTS_URL = 'https://dummyjson.com/products/category/'
@@ -12,11 +13,9 @@ export const getCategories = async () => {
      
     } catch (err) {
       if (!err?.response) {
-          errMsg ='No Server Response';
-      } else if (err.response?.status === 409) {
-          errMsg =err.msg;
-      } else {
-          errMsg = 'Category Fetch Failed'
+      return  openNotificationWithIcon('error', 'ERROR', 'No Server Response.')
+       } else {
+        return  openNotificationWithIcon('error', 'ERROR', 'Category Fetch Failed')
       }
     }
   }

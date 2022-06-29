@@ -1,6 +1,6 @@
 import { Breadcrumb, Button, Image, Input, Skeleton } from "antd";
 import Item from "antd/lib/list/Item";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ProductImages from "../components/ProductImages";
@@ -42,20 +42,21 @@ const Box = styled.div`
 const ProductDisplay = () => {
   const [itemValue, setItemValue] = useState(1);
   let { id } = useParams();
+  const [prodId, setProdId] = useState(id);
   const [product, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [indexPos, setIndexPos] = useState(0);
   const myRef = useRef(null);
 
-  const {addToCart, getItemQuantity, decreaseCartQuantity } = useCart();
+  const { addToCart, getItemQuantity, decreaseCartQuantity } = useCart();
 
-  const quantity = getItemQuantity(Number(id))
+  const quantity = getItemQuantity(Number(id));
 
   const getProduct = async () => {
     setIsLoading(true);
     const { data } = await getProductById(id);
     if (data) {
-      quantity && setItemValue(quantity)
+      quantity && setItemValue(quantity);
       setIsLoading(false);
     }
     return setProduct(data);
@@ -67,7 +68,7 @@ const ProductDisplay = () => {
     getProduct();
 
     return () => abortController.abort();
-  }, []);
+  }, [id]);
 
   const handleTab = (index) => {
     const images = myRef.current.children;
@@ -79,31 +80,30 @@ const ProductDisplay = () => {
   };
 
   const updateItemValue = (value) => {
-    if (value < 1 ) {
+    if (value < 1) {
       return setItemValue(1);
+    } else if (value > product.stock) {
+      return setItemValue(product.stock);
+    } else {
+      setItemValue(value);
     }
-    else if(value > product.stock){
-        return setItemValue(product.stock)
-    }
-    else {
-       setItemValue(value)
-    }
-
-        
   };
 
   const handleChange = (e) => {
-
     updateItemValue(validateNumber(e));
-  }
+  };
 
   const handleClick = () => {
-    if(quantity && quantity > itemValue){
-  return  decreaseCartQuantity(Number(id),quantity - itemValue);
-    
+    if (quantity && quantity > itemValue) {
+      return decreaseCartQuantity(Number(id), quantity - itemValue);
     }
-   return addToCart(Number(id),itemValue -quantity, product?.price, product?.discountPercentage)
-  }
+    return addToCart(
+      Number(id),
+      itemValue - quantity,
+      product?.price,
+      product?.discountPercentage
+    );
+  };
 
   return (
     <div className="container">
@@ -141,10 +141,11 @@ const ProductDisplay = () => {
                 <h2 className="text-uppercase">{product.title}</h2>
               </div>
               <h4 style={{ fontSize: "22px", color: "#f57224" }}>
-                ${totalPriceCalculator(
-                    product.price,
-                    product.discountPercentage
-                  )}
+                $
+                {totalPriceCalculator(
+                  product.price,
+                  product.discountPercentage
+                )}
               </h4>
               <div className="d-flex  mb-3 ">
                 <span
@@ -155,8 +156,7 @@ const ProductDisplay = () => {
                     color: "#9e9e9e",
                   }}
                 >
-                  $
-                 {product.price}
+                  ${product.price}
                 </span>
                 <span style={{ fontSize: "16px", fontWeight: "400px" }}>
                   -{product.discountPercentage}%
@@ -171,9 +171,13 @@ const ProductDisplay = () => {
               />
               <div className="row justify-content-center">
                 <div className="p-2 d-flex ">
-                  <Button icon={<MinusOutlined />} className="p-2" onClick={() => updateItemValue(itemValue-1)} />
+                  <Button
+                    icon={<MinusOutlined />}
+                    className="p-2"
+                    onClick={() => updateItemValue(itemValue - 1)}
+                  />
                   <Input
-                    type={'number'}
+                    type={"number"}
                     size="small"
                     placeholder="1"
                     style={{ width: "10%" }}
@@ -182,7 +186,11 @@ const ProductDisplay = () => {
                     value={itemValue}
                     onChange={handleChange}
                   />
-                  <Button icon={<PlusOutlined />} className="p-2" onClick={() => updateItemValue(itemValue+1)} />
+                  <Button
+                    icon={<PlusOutlined />}
+                    className="p-2"
+                    onClick={() => updateItemValue(itemValue + 1)}
+                  />
                 </div>
                 <Button className="mt-2" type="primary" onClick={handleClick}>
                   Add to cart

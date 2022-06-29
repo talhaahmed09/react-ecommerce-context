@@ -4,7 +4,7 @@ import { useAuth } from "../context/auth/AuthProvider";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 const Login = () => {
-  const {logIn} = useAuth();
+  const {logIn,state} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || '/';
@@ -12,7 +12,11 @@ const Login = () => {
   const handleForm = async (values) => {
     const data = await logIn(values);
     if(data.token) {
-      navigate(from,{replace:true})
+      if(state.isLoggedIn){
+        setTimeout(() => {
+          navigate(from,{replace:true})
+        },5000)
+      }
     }
 
     // const roles = response?.data?.roles;

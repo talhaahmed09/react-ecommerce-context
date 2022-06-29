@@ -3,11 +3,11 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/auth/AuthProvider';
 
 const PublicRoutes = () => {
-    const {state} = useAuth();
+    const {isLoggedIn} = useAuth();
     const location = useLocation();
     const from = location?.state?.from?.pathname || '/';
     return (
-      state?.isLoggedIn?  <Navigate to={from}/> : <Outlet/>
+      isLoggedIn?  <Navigate to={from}/> : <Outlet/>
   )
 }
 

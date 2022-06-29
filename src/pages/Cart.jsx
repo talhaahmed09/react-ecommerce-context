@@ -10,10 +10,7 @@ const Cart = () => {
 
   return cartItems.length === 0 ? (
     <div className="contaier">
-      <div
-        className="text-center"
-        style={{ margin: "auto 0" }}
-      >
+      <div className="text-center" style={{ margin: "auto 0" }}>
         <div className="m-2 h2" style={{ fontSize: "1.25rem " }}>
           Your cart is currently empty{" "}
         </div>
@@ -24,7 +21,6 @@ const Cart = () => {
         </div>
 
         <Link to="/">
-          {" "}
           <Button className="m-2"> Continue Shopping </Button>{" "}
         </Link>
       </div>
@@ -40,9 +36,7 @@ const Cart = () => {
 
         <div className="mx-2  col-md-3 col-xs-12">
           <div className=" container-fluid my-5">
-            <h6  style={{ fontSize: "26px" }}>
-              Cart Summary
-            </h6>
+            <h6 style={{ fontSize: "26px" }}>Cart Summary</h6>
             <div className="row my-2">
               <div className="col">
                 <p>Subtotal</p>
@@ -70,7 +64,10 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-           <Link to="/checkout"> <Button className="my-4">Checkout</Button> </Link>
+            <Link to="/checkout">
+              {" "}
+              <Button className="my-4">Checkout</Button>{" "}
+            </Link>
           </div>
         </div>
       </div>

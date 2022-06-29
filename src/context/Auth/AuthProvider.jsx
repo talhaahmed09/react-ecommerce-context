@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
     if (data) {
       setisLoggedIn(true);
       setUser(data);
-      dispatch({
+      await dispatch({
         type: "SET_LOGIN_SUCCESS",
         payload: {
           user: user,
@@ -48,6 +48,7 @@ const AuthProvider = ({ children }) => {
       state: state,
       logIn,
       logOut,
+      isLoggedIn
     }),
     [state]
   );
